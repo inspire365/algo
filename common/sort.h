@@ -16,18 +16,18 @@ int partition(T* base, const int left, const int right, int (*cmp)(const T&, con
     if(cmp(base[high], base[right]) < 0)
     {
       ++low;
-      // swap
+      // swap, may make it unstable
       T tmp      = base[low];
       base[low]  = base[high];
       base[high] = tmp;
     }
   }
-  // the following swap make it unstable
+  // the following swap may make it unstable
   T tmp = base[low + 1];
   base[low + 1] = base[right];
   base[right]   = tmp;
   return (low + 1);
-}
+} // partition
 
 /**
   find the nth element of the array
@@ -46,7 +46,10 @@ T* findnth(
   int rhs = right;
   int pivot = left;
   do
-  {
+  { 
+    // we must call partiion at least once
+    // otherwise it's out of order, makes no
+    // sense to find the right position
     pivot = partition(base, lhs, rhs, cmp);
     int pos = pivot - left;
     if(pos == nth)
