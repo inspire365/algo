@@ -103,6 +103,41 @@ void insertion_sort(T* base, int len, int (*cmp)(const T& lhs, const T& rhs))
   }
 } // insertion sort
 
+
+
+/**
+ * counting sort: stable, time complexity: O(n)
+ * @param in input array
+ * @param out output array
+ * @param len arary length of in & out
+ * @param range interger range is 0 ~ range
+*/
+void counting_sort(int* in, int* out, const int len, const int range)
+{
+  assert(in && out && len > 0 && range >= 0);
+  int r = range + 1;  // one more space for 0
+  int* pt = (int*)calloc(r, sizeof(int));
+  for(int i = 0; i < len; ++i)
+  {
+    // contains the number of elements equal to in[i]
+    pt[in[i]] = pt[in[i]] + 1;
+  }
+
+  for(int i = 1; i < r; ++i)
+  {
+    // contains the number of elements less than or equal to i
+    pt[i] = pt[i] + pt[i-1];
+  }
+
+  for(int i = len - 1; i >= 0; --i)
+  {
+    // to make it clear, draw a picture
+    out[pt[in[i]] - 1] = in[i];
+    pt[in[i]] = pt[in[i]] - 1;
+  }
+  free(pt);
+}
+
 }}  // ::can::common
 
 #endif // COMMON_CAN_SORT_H_
